@@ -44,13 +44,20 @@ Os testes e2e sobem um Postgres temporário com Testcontainers e chamam a API de
 
 ## CI
 
-Implementei CI com GitHub Actions (`.github/workflows/ci.yml`). Roda em push na main e em pull requests:
+GitHub Actions (`.github/workflows/ci.yml`), rodando em push na main e em pull requests:
 
 - lint, typecheck e testes unitários;
 - testes e2e com cobertura (o relatório fica como artefato do job);
-- build da imagem Docker, depois que os dois anteriores passam, só para garantir que o Dockerfile continua funcionando.
+- build da imagem Docker, depois que os dois anteriores passam. Em PR só valida o build. Na main a imagem é publicada no GitHub Container Registry com as tags `latest` e o SHA do commit.
 
-Não coloquei CD porque o projeto não vai para produção: não tem ambiente para receber deploy nem registry para publicar imagem. Se fosse o caso, o próximo passo seria publicar a imagem (ex.: ECR ou GHCR) quando a main passa no CI e fazer o deploy a partir dela.
+Para usar a imagem publicada (precisa de um Postgres acessível):
+
+```bash
+docker pull ghcr.io/alemedinabjj/desafio-integracao-pedidos:latest
+docker run -p 3000:3000 -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/pedidos ghcr.io/alemedinabjj/desafio-integracao-pedidos:latest
+```
+
+Não tem deploy automático porque o projeto não vai para produção e não existe ambiente para receber. Se tivesse, o deploy usaria a imagem publicada pelo SHA do commit.
 
 ## Exemplo
 
