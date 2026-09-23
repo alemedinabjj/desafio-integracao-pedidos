@@ -1,6 +1,6 @@
 {
   "name": "desafio-integracao-pedidos",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "API de integração de pedidos de exame, documentos e chegada de exames",
   "author": "",
   "private": true,
